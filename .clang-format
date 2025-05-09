@@ -1,5 +1,2 @@
 BasedOnStyle: LLVM
-BreakBeforeBraces: Allman
-IndentWidth: 2
-IndentAccessModifiers: false
-AccessModifierOffset: -1
+AllowShortCaseLabelsOnASingleLine: true
