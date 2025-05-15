@@ -1,5 +1,17 @@
 #include "scanner.hpp"
 
+namespace jlox_cpp {
+
+void run_prompt() {}
+
+template <std::size_t BUFF_SIZE>
+void run_file(std::array<char, BUFF_SIZE> *buffer, char *file_name) {
+  const auto source_len = load_source(buffer, file_name);
+  scan(buffer->data(), source_len);
+}
+
+} // namespace jlox_cpp
+
 int main(const int argc, char **argv) {
   namespace jl = jlox_cpp;
 

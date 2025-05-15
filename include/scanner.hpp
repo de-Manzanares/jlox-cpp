@@ -20,8 +20,6 @@ struct SourceStats {
   std::size_t lines;
 };
 
-inline void run_prompt() {}
-
 template <std::size_t BUFF_SIZE>
 std::size_t load_source(std::array<char, BUFF_SIZE> *buffer,
                         const char *file_name) {
@@ -45,7 +43,14 @@ std::size_t load_source(std::array<char, BUFF_SIZE> *buffer,
   return stats.bytes;
 }
 
-inline void scan(const char *src, const std::size_t src_len) {
+/**
+ *
+ * @param src characters to scan
+ * @param src_len number of characters
+ * @return tokens
+ * @note not an on-demand lexer... uses more memory this way...
+ */
+inline std::vector<Token> scan(const char *src, const std::size_t src_len) {
   using tt = TokenType;
   using Literal = std::variant<std::monostate, bool, double, std::string>;
 
@@ -129,9 +134,9 @@ inline void scan(const char *src, const std::size_t src_len) {
         ++i_it;
         ++len;
       }
-      if (*i_it == '\n') {
-        len--;
-      }
+      // if (*i_it == '\n') {
+      len--;
+      // }
       // todo terminate cleanly?
       if (*(i_it - 1) != '.') {
         add_token(tt::number, len, std::stod(std::string{it, it + len}));
@@ -238,12 +243,7 @@ inline void scan(const char *src, const std::size_t src_len) {
               << std::setfill(' ') << "^ ";
     util::println(msg, '\n');
   }
-}
-
-template <std::size_t BUFF_SIZE>
-void run_file(std::array<char, BUFF_SIZE> *buffer, char *file_name) {
-  const auto source_len = load_source(buffer, file_name);
-  scan(buffer->data(), source_len);
+  return tokens;
 }
 
 } // namespace jlox_cpp
